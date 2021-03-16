@@ -89,7 +89,7 @@ def extract_drink_data(page_html):
     
     #Gets title name
     #wine_name = soup.find("div", class_="react-no-print")
-    pattern_wine_name = re.compile(r'\"productNameBold\":\"[a-zA-Z\s]*","')   #(r'(\"productNameBold\":\")([a-zA-Z\s])*(",")')
+    pattern_wine_name = re.compile(r'\"productNameBold\":\"[a-zA-Z\s\S]*\"\,\"productNameThin')   #(r'(\"productNameBold\":\")([a-zA-Z\s])*(",")')
     wine_name = pattern_wine_name.findall(str(page_html))
     wine_name = wine_name[0][19:-3]
     #print(wine_name)
