@@ -1,5 +1,5 @@
-import re, getopt, sys, urllib.request, string
-
+import re, getopt, sys, urllib.request, string, timeit
+from datetime import date
 
 
 #Class to store data about the wine 
@@ -170,13 +170,13 @@ def extract_drink_data(page_html):
 #Input list with wine classes
 #Output creates output.txt file
 def create_labels(class_list_wines):
-    
+    datum = date.today()
+
     new_file = open("output.txt", "w", encoding='utf-8')
     for wine in class_list_wines:
-        new_file.write(wine.name + " " + wine.name2+ "\n")
+        new_file.write(wine.name + ", " + wine.name2+ "\n")
         new_file.write(wine.location + "\n")
-        new_file.write(wine.price +"kr "+ "sysnr:" + wine.productnr + "\n")
-        new_file.write(wine.alcohol_procentage + "% " + wine.suger_amount +"g/l" + "\n")
+        new_file.write(wine.price +"kr "+ "sysnr:" + wine.productnr +"\t" + wine.alcohol_procentage + "% " + wine.suger_amount +"g/l \t" + str(datum) +"\n")
         new_file.write(wine.taste_and_usage + "\n")
         """#Old print out style
         index = 0
