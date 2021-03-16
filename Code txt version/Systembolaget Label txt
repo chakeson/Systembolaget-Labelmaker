@@ -91,7 +91,7 @@ def extract_drink_data(page_html):
     #wine_name = soup.find("div", class_="react-no-print")
     pattern_wine_name = re.compile(r'\"productNameBold\":\"[a-zA-Z\s\S]*\"\,\"productNameThin')   #(r'(\"productNameBold\":\")([a-zA-Z\s])*(",")')
     wine_name = pattern_wine_name.findall(str(page_html))
-    wine_name = wine_name[0][19:-3]
+    wine_name = wine_name[0][19:-18]
     #print(wine_name)
 
     #Gets sub name
@@ -166,7 +166,8 @@ def create_labels(class_list_wines):
         new_file.write(wine.location + "\n")
         new_file.write(wine.price +"kr "+ "sysnr:" + wine.productnr + "\n")
         new_file.write(wine.alcohol_procentage + "% " + wine.suger_amount +"g/l" + "\n")
-        
+        new_file.write(wine.taste_and_usage + "\n")
+        """#Old print out style
         index = 0
         for text in wine.taste_and_usage:
             
@@ -175,7 +176,7 @@ def create_labels(class_list_wines):
                 new_file.write("\n") 
 
             index +=1
-
+        """
         
         new_file.write("\n\n\n\n")
 
