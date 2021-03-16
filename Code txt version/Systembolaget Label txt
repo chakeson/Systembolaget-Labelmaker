@@ -166,8 +166,8 @@ def create_labels(class_list_wines):
         new_file.write(wine.location + "\n")
         new_file.write(wine.price +"kr "+ "sysnr:" + wine.productnr + "\n")
         new_file.write(wine.alcohol_procentage + "% " + wine.suger_amount +"g/l" + "\n")
-        
-        """
+        new_file.write(wine.taste_and_usage + "\n")
+        """#Old print out style
         index = 0
         for text in wine.taste_and_usage:
             
