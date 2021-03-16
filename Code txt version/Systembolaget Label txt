@@ -48,7 +48,7 @@ def load_url_file(file_to_load):
 def input_validation(list_of_pages):
 
     #Regular expression to practice, easier way is probably too just check if the first X characters of the string match one of the valid url versions.
-    pattern_regex_my_own = re.compile(r'^(https:\/\/www.systembolaget.se/produkt/|http:\/\/www.systembolaget.se/produkt/)')
+    pattern_regex_my_own = re.compile(r'^(https:\/\/www.systembolaget.se/produkt/|http:\/\/www.systembolaget.se/produkt/|https:\/\/www.systembolaget.se/\d*)')
     #pattern_regex_generated = re.compile(r'^https://www\.systembolaget\.se/produkt/[a-zA-Z]+/[a-zA-Z]+-[0-9]+/$')
     
     validated_pages = []
