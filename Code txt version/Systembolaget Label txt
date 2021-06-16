@@ -48,24 +48,22 @@ def load_url_file(file_to_load):
 def input_validation(list_of_pages):
 
     #Regular expression to practice, easier way is probably too just check if the first X characters of the string match one of the valid url versions.
-    pattern_regex_my_own = re.compile(r'^(https:\/\/www.systembolaget.se/produkt/|http:\/\/www.systembolaget.se/produkt/|https:\/\/www.systembolaget.se/\d*)')
+    pattern_regex_website = re.compile(r'^(https:\/\/www.systembolaget.se/produkt/|http:\/\/www.systembolaget.se/produkt/|https:\/\/www.systembolaget.se/\d*)')
     #pattern_regex_generated = re.compile(r'^https://www\.systembolaget\.se/produkt/[a-zA-Z]+/[a-zA-Z]+-[0-9]+/$')
     
     #check for number inputs
-    to_be_added = []
     pattern_regex_nr = re.compile(r'^(\d*)')
-    for page in list_of_pages:
-        result = pattern_regex_nr.findall(page)
+    for iterator in range(len(list_of_pages)):
+        result = pattern_regex_nr.findall(list_of_pages[iterator])
         if result[0] != "":
-            to_be_added.append("https://www.systembolaget.se/"+str(page))
-    
-    for page in to_be_added:
-        list_of_pages.append(page)
+            list_of_pages[iterator] = "https://www.systembolaget.se/"+str(list_of_pages[iterator])
 
+    
+    #check website inputs including the constructed ones in the previous loop
     validated_pages = []
     index = 0
     for page in list_of_pages:
-        result = pattern_regex_my_own.findall(page)
+        result = pattern_regex_website.findall(page)
         if result != []:
             validated_pages.append(page)
         else:
@@ -112,9 +110,9 @@ def extract_drink_data(page_html):
     #print(wine_name2)
 
     #Gets the country
-    pattern_wine_location1 = re.compile(r"\"country\"\:\"[a-zA-Z\s\S]*\",\"categoryLevel1")
+    pattern_wine_location1 = re.compile(r"\"country\"\:\"[a-zA-Z\s\S]*\",\"originLevel2")
     wine_location1 = pattern_wine_location1.findall(str(page_html))
-    wine_location1 = wine_location1[0][11:-17]
+    wine_location1 = wine_location1[0][11:-15]
     #print(wine_location1)
 
     #Gets the region in the country
@@ -124,7 +122,7 @@ def extract_drink_data(page_html):
     #print(wine_location2)
 
     #Combine the locations
-    wine_location = wine_location1 + " " +wine_location2
+    wine_location = wine_location1 + " " + wine_location2
     #print(wine_location)
 
     #Gets the wine price
@@ -135,9 +133,9 @@ def extract_drink_data(page_html):
     #print(wine_price)
 
     #Gets the systembolaget productnr
-    pattern_wine_productnr = re.compile(r'\"productNumberShort\":"\d*\"\,\"assortmentText')
+    pattern_wine_productnr = re.compile(r'\"productNumberShort\":"\d*\"\,\"volume')
     wine_productnr = pattern_wine_productnr.findall(str(page_html))
-    wine_productnr = wine_productnr[0][22:-17]
+    wine_productnr = wine_productnr[0][22:-9]
     #print(wine_productnr)
 
     #Gets the alcohole procentage
@@ -150,17 +148,26 @@ def extract_drink_data(page_html):
     #Get the suger content of the drink
     #pattern_wine_suger_content = re.compile(r'\"sugarContent\"\:\"\d*\"\,\"tasteSymbolsList\"\:')
     #pattern_wine_suger_content = re.compile(r'\"sugarContent\"\:\"\s\d*\"\,\"tasteSymbolsList\"\:')
-    pattern_wine_suger_content = re.compile(r'\"sugarContent\"\:\"\S\d*\"\,\"tasteSymbolsList\"\:|\"sugarContent\"\:\"\d*\"\,\"tasteSymbolsList\"\:')
+    pattern_wine_suger_content = re.compile(r'\"sugarContent\"\:\"\S\d*\"\,\"additives\"\:|\"sugarContent\"\:\"\d*\"\,\"additives\"\:')
     wine_suger_content = pattern_wine_suger_content.findall(str(page_html))
-    wine_suger_content = wine_suger_content[0][16:-21]
+    wine_suger_content = wine_suger_content[0][16:-14]
     #print(wine_suger_content)
     
 
     #Gets the taste and usage recommendations
-    pattern_wine_taste_and_usage = re.compile(r'\"tasteAndUsage\"\:\"[a-zA-Z\s\S]*\"\,\"isBsAssortment\"')
-    wine_taste_and_usage = pattern_wine_taste_and_usage.findall(str(page_html))
-    wine_taste_and_usage = wine_taste_and_usage[0][17:-18]
+    pattern_wine_taste = re.compile(r'\"taste\"\:\"[a-zA-Z\s\S]*\"\,\"aroma\"')
+    wine_taste = pattern_wine_taste.findall(str(page_html))
+    wine_taste = wine_taste[0][9:-9]
     #print(wine_taste_and_usage)
+
+    #Gets the taste and usage recommendations
+    pattern_usage = re.compile(r'\"usage\"\:\"[a-zA-Z\s\S]*\"\,\"alcoholPercentage\"')
+    wine_usage = pattern_usage.findall(str(page_html))
+    wine_usage = wine_usage[0][9:-21]
+    #print(wine_taste_and_usage)
+
+    #Combine taste and usage
+    wine_taste_and_usage = wine_taste +" " + wine_usage
 
     #Create and fill the class with data and return it
     class_instance_wine = wine( wine_name, wine_name2, wine_location, wine_price, wine_productnr, wine_alc_procentage, wine_suger_content, wine_taste_and_usage)
