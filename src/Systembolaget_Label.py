@@ -87,13 +87,23 @@ def input_validation(list_of_pages):
 # Input URL and index which is used to name it
 # Output
 def dataurl_data_fetcher(url, index):
-
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    temp = urllib.request.urlopen(req).read()
-    temp = temp.decode(
-        "utf-8"
-    )  # Website contains ÅÄÖ so we need to ensure proper handling and use UTF-8 decoding since the temp comes in as a datastream of 0&1
-
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        temp = urllib.request.urlopen(req).read()
+        temp = temp.decode(
+            "utf-8"
+        )  # Website contains ÅÄÖ so we need to ensure proper handling and use UTF-8 decoding since the temp comes in as a datastream of 0&1
+    except urllib.error.HTTPError as e:
+        with open("errorfile.txt", "w") as errorfile:
+            errorfile.write(str(e)+"\n"+str(index)+"\n"+str(url))
+        print(e)
+        return
+    except Exception as e:
+        with open("errorfile.txt", "w") as errorfile:
+            errorfile.write(str(e)+"\n"+str(index)+"\n"+str(url))
+        print(e)
+        return
+    
     return temp  # site_data
 
 
