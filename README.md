@@ -1,5 +1,6 @@
 # Systembolaget-Labelmaker
 Uses webscraping to take and url and create a label for the bottle.
+![Preview of program](https://cdn.discordapp.com/attachments/789983728625385522/917459593880277122/base.png)
 
 # Purpose
 My parent make labels for their wine bottles to know what the wine fits with and what it contains and some other information.
@@ -14,8 +15,4 @@ It is then written to and output.txt file.
 Code was formated by python black. Python-docx for creating the word document for print out ontop of output.txt
 
 # Upgrades for next version
-Maybe sys.argv inputs for nrs
-Consider fancy labels:
-https://pypi.org/project/pylabels/
-https://pypi.org/project/blabel/
-
+Add GUI
