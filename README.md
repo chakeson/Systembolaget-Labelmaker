@@ -1,6 +1,6 @@
 # Systembolaget-Labelmaker
 Uses webscraping to take and url and create a label for the bottle.
-![Preview of program](https://cdn.discordapp.com/attachments/789983728625385522/917459593880277122/base.png)
+![Preview of program](https://github.com/chakeson/Systembolaget-Labelmaker/blob/main/base.png)
 
 # Purpose
 My parent make labels for their wine bottles to know what the wine fits with and what it contains and some other information.
