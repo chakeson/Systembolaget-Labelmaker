@@ -2,28 +2,7 @@ import re, sys, urllib.request
 from datetime import date
 from docx import Document
 
-# Class to store data about the wine
-class wine:
-    def __init__(
-        self,
-        name,
-        name2,
-        location,
-        price,
-        productnr,
-        alcohol_procentage,
-        suger_amount,
-        taste_and_usage,
-    ):
-        self.name = name
-        self.name2 = name2
-        self.location = location
-        self.price = price
-        self.productnr = productnr
-        self.alcohol_procentage = alcohol_procentage
-        self.suger_amount = suger_amount
-        self.taste_and_usage = taste_and_usage
-
+from wine import Wine
 
 # Input 1 string
 # Output list o
@@ -259,7 +238,7 @@ def extract_drink_data(page_html):
     wine_taste_and_usage = wine_taste + " " + wine_usage
 
     # Create and fill the class with data and return it
-    class_instance_wine = wine(
+    class_instance_wine = Wine(
         wine_name,
         wine_name2,
         wine_location,
