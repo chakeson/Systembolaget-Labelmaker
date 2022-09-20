@@ -1,70 +1,11 @@
-import re, sys
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 
 from wine import Wine
+from file_loading_validation import load_url_file, input_validation
 from label_creation import create_labels, create_output_docx
 from resource_path import resource_path
-
-# Input 1 string
-# Output list o
-def load_url_file(file_to_load):
-    urls = []
-    try:
-        urls = open(file_to_load, "r", encoding="utf-8")  # Opens the file with the URLs
-    except:
-        print(
-            "Missing input txt file. Creating that now as input.txt. PLease enter the URLS, row separated"
-        )
-
-        new_file = open("input.txt", "w")
-        new_file.write("\n")
-        new_file.close()
-
-        sys.exit()
-
-    file_content = urls.readlines()
-    for row in range(len(file_content)):
-        file_content[row] = file_content[row].strip("\n")
-
-    # file_content = infil.read()
-    return file_content
-
-
-# Input list with user input
-# Output None, removes invalid input and prints what input was wrong and then returns the fixed list
-def input_validation(list_of_pages):
-
-    # Regular expression to practice, easier way is probably too just check if the first X characters of the string match one of the valid url versions.
-    pattern_regex_website = re.compile(
-        r"^(https:\/\/www.systembolaget.se/produkt/|http:\/\/www.systembolaget.se/produkt/|https:\/\/www.systembolaget.se/\d*)"
-    )
-    # pattern_regex_generated = re.compile(r'^https://www\.systembolaget\.se/produkt/[a-zA-Z]+/[a-zA-Z]+-[0-9]+/$')
-
-    # check for number inputs
-    pattern_regex_nr = re.compile(r"^(\d*)")
-    for iterator in range(len(list_of_pages)):
-        result = pattern_regex_nr.findall(list_of_pages[iterator])
-        if result[0] != "":
-            list_of_pages[iterator] = "https://www.systembolaget.se/" + str(
-                list_of_pages[iterator]
-            )
-
-    # check website inputs including the constructed ones in the previous loop
-    validated_pages = []
-    index = 0
-    for page in list_of_pages:
-        result = pattern_regex_website.findall(page)
-        if result != []:
-            validated_pages.append(page)
-        else:
-            print("Link on row " + str(index + 1) + " is broken.")
-
-        index += 1
-
-    return validated_pages
-
 
 # Input URL and index which is used to name it
 # Output
