@@ -7,6 +7,11 @@ chromedriver.exe
 
 # production
 /build
+/src/build
+/src/dist
 
 # misc
-
+*.pyc
+__pycache__
+output.txt
+output.docx
