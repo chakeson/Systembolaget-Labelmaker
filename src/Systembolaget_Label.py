@@ -178,9 +178,9 @@ def create_labels(class_list_wines):
             + wine.productnr
             + "\t"
             + wine.alcohol_procentage
-            + "% "
+            + " "
             + wine.suger_amount
-            + "g/100ml \t"
+            + "\t"
             + str(datum)
             + "\n"
         )
@@ -227,9 +227,9 @@ def create_output_docx(class_list_wines):
             + wine.productnr
             + "\t"
             + wine.alcohol_procentage
-            + "% "
+            + " "
             + wine.suger_amount
-            + "g/100ml \t"
+            + "\t"
             + str(datum)
             + "\n"
             + wine.taste_and_usage
