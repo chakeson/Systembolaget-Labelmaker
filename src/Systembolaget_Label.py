@@ -107,7 +107,7 @@ def extract_drink_data(page_html):
 
     try:
         # Gets sub name
-        wine_name2 = page_html.find("h1", class_="css-3f5hx2 e1gytpgj0").next_sibling.next_sibling.contents[0]
+        wine_name2 = page_html.find("h1", class_="css-3f5hx2 e1gytpgj0").next.next_sibling.contents[0]
     except Exception as e:
         wine_name2 = f"Failed to fetch wine sub name. {e} "
 
