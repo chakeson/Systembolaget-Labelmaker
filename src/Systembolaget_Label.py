@@ -1,8 +1,12 @@
-import re, sys, urllib.request
+import re, sys
 from datetime import date
 from docx import Document
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
 
 from wine import Wine
+from resource_path import resource_path
 
 # Input 1 string
 # Output list o
@@ -66,33 +70,30 @@ def input_validation(list_of_pages):
 # Input URL and index which is used to name it
 # Output
 def dataurl_data_fetcher(url, index):
+    
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--window-size=1920,1080")
+    exe_path = resource_path('./driver/chromedriver.exe')
+    
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        temp = urllib.request.urlopen(req).read()
-        temp = temp.decode(
-            "utf-8"
-        )  # Website contains ÅÄÖ so we need to ensure proper handling and use UTF-8 decoding since the temp comes in as a datastream of 0&1
-    except urllib.error.HTTPError as e:
-        with open("errorfile.txt", "w") as errorfile:
-            errorfile.write(str(e)+"\n"+str(index)+"\n"+str(url))
-        print(e)
-        return
+        driver = webdriver.Chrome(executable_path=exe_path, chrome_options=chrome_options)
+
+        driver.get(url)
+
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        
+        driver.close()
+
+
     except Exception as e:
         with open("errorfile.txt", "w") as errorfile:
             errorfile.write(str(e)+"\n"+str(index)+"\n"+str(url))
         print(e)
         return
     
-    return temp  # site_data
+    return soup
 
-
-"""
-    webcontent = urllib.request.urlopen(url)
-    with open( index, "w") as fil:
-        for row in webcontent:
-            utf8line = row.decode('utf8')
-            fil.write(utf8line)
-"""
 
 # Input string version of the site
 # Output instance of class wine with the data filed.
@@ -100,142 +101,52 @@ def extract_drink_data(page_html):
 
     try:
         # Gets title name
-        # wine_name = soup.find("div", class_="react-no-print")
-        pattern_wine_name = re.compile(
-            r"\"productNameBold\":\"[a-zA-Z\s\S]*\"\,\"productNameThin"
-        )  # (r'(\"productNameBold\":\")([a-zA-Z\s])*(",")')
-        wine_name = pattern_wine_name.findall(str(page_html))
-        wine_name = wine_name[0][19:-18]
-        # print(wine_name)
-    except IndexError:
-        wine_name = "Failed to fetch wine name. Regex 1 failure. "
+        wine_name = page_html.find("h1", class_="css-3f5hx2 e1gytpgj0").next.contents[0]
     except Exception as e:
         wine_name = f"Failed to fetch wine name. {e} "
 
     try:
         # Gets sub name
-        pattern_wine_name2 = re.compile(
-            r"\"metaData\"\:\{\"metaTitle\"\:\"[a-zA-Z\s\S]*\|"
-        )
-        wine_name2 = pattern_wine_name2.findall(str(page_html))
-        wine_name2 = wine_name2[0][26 + len(wine_name) : -2]
-        # print(wine_name2)
-    except IndexError:
-        wine_name2 = "Failed to fetch wine sub name. Regex 2 failure. "
+        wine_name2 = page_html.find("h1", class_="css-3f5hx2 e1gytpgj0").next_sibling.next_sibling.contents[0]
     except Exception as e:
         wine_name2 = f"Failed to fetch wine sub name. {e} "
 
     try:
-        # Gets the country
-        pattern_wine_location1 = re.compile(
-            r"\"country\"\:\"[a-zA-Z\s\S]*\",\"originLevel2"
-        )
-        wine_location1 = pattern_wine_location1.findall(str(page_html))
-        wine_location1 = wine_location1[0][11:-15]
-        # print(wine_location1)
-    except IndexError:
-        wine_location1 = "Failed to fetch wine location 1. Regex 3 failure. "
+        # Gets the country and potentially region
+        wine_location = page_html.find_all("p", class_="css-l7e9hy enp2lf70")[6].contents[0]
     except Exception as e:
-        wine_location1 = f"Failed to fetch wine location 1. {e} "
-
-    try:
-        # Gets the region in the country
-        pattern_wine_location2 = re.compile(
-            r"\"originLevel1\"\:\"[a-zA-Z\s\S]*\",\"originLevel3"
-        )
-        wine_location2 = pattern_wine_location2.findall(str(page_html))
-        wine_location2 = wine_location2[0][16:-15]
-        # print(wine_location2)
-    except IndexError:
-        wine_location2 = "Failed to fetch wine location 2. Regex 4 failure. "
-    except Exception as e:
-        wine_location2 = f"Failed to fetch wine location 2. {e} "
-
-    # Combine the locations
-    wine_location = wine_location1 + " " + wine_location2
-    # print(wine_location)
+        wine_location = f"Failed to fetch wine location 1. {e} "
 
     try:
         # Gets the wine price
-        # pattern_wine_price = re.compile(r'priceInclVat":\d\d.\d\d,\"')
-        pattern_wine_price = re.compile(r'priceInclVat":\d*.\d*,\"')
-        wine_price = pattern_wine_price.findall(str(page_html))
-        wine_price = wine_price[0][14:-2]
-        # print(wine_price)
-    except IndexError:
-        wine_price = "Failed to fetch wine price. Regex 5 failure. "
+        wine_price = page_html.find("p", class_="css-mzsruq enp2lf70").contents[0]
+        wine_price = wine_price[0:-2]
     except Exception as e:
         wine_price = f"Failed to fetch wine price. {e} "
 
     try:
         # Gets the systembolaget productnr
-        pattern_wine_productnr = re.compile(r'\"productNumberShort\":"\d*\"\,\"volume')
-        wine_productnr = pattern_wine_productnr.findall(str(page_html))
-        wine_productnr = wine_productnr[0][22:-9]
-        # print(wine_productnr)
-    except IndexError:
-        wine_productnr = "Failed to fetch wine product number. Regex 6 failure. "
+        wine_productnr = page_html.find("span", class_="css-1f2m4s6 enp2lf70").contents[0]
     except Exception as e:
         wine_productnr = f"Failed to fetch wine product number. {e} "
 
     try:
         # Gets the alcohole procentage
-        # pattern_wine_alc_procentage = re.compile(r'\"alcoholPercentage\"\:\d\d.\d\d\,\"tastingDate\"')
-        pattern_wine_alc_procentage = re.compile(
-            r"\"alcoholPercentage\"\:\d*.\d*\,\"tastingDate\""
-        )
-        wine_alc_procentage = pattern_wine_alc_procentage.findall(str(page_html))
-        wine_alc_procentage = wine_alc_procentage[0][20:-14]
-        # print(wine_alc_procentage)
-    except IndexError:
-        wine_alc_procentage = (
-            "Failed to fetch wine alcohole procentage. Regex 7 failure. "
-        )
+        wine_alc_procentage = page_html.find_all("p", class_="css-12l74ml er6ap680")[1].contents[0]
     except Exception as e:
         wine_alc_procentage = f"Failed to fetch wine alcohole procentage. {e} "
 
     try:
-        # Get the suger content of the drink
-        # pattern_wine_suger_content = re.compile(r'\"sugarContent\"\:\"\d*\"\,\"tasteSymbolsList\"\:')
-        # pattern_wine_suger_content = re.compile(r'\"sugarContent\"\:\"\s\d*\"\,\"tasteSymbolsList\"\:')
-        # pattern_wine_suger_content = re.compile(r'\"sugarContent\"\:\"\S\d*\"\,\"additives\"\:|\"sugarContent\"\:\"\d*\"\,\"additives\"\:')
-        pattern_wine_suger_content = re.compile(
-            r"\"sugarContentGramPer100ml\"\:\"\s*\d*\S*\d*\"\,\"additives\"\:"
-        )
-        wine_suger_content = pattern_wine_suger_content.findall(str(page_html))
-        wine_suger_content = wine_suger_content[0][28:-14]
-        # print(wine_suger_content)
-    except IndexError:
-        wine_suger_content = "Failed to fetch wine sugar content. Regex 8 failure. "
+        # Get the suger content of the drink       
+        wine_suger_content = page_html.find_all("p", class_="css-l7e9hy enp2lf70")[8].contents[0]
     except Exception as e:
         wine_suger_content = f"Failed to fetch wine sugar content. {e} "
 
     try:
         # Gets the taste and usage recommendations
-        pattern_wine_taste = re.compile(r"\"taste\"\:\"[a-zA-Z\s\S]*\"\,\"aroma\"")
-        wine_taste = pattern_wine_taste.findall(str(page_html))
-        wine_taste = wine_taste[0][9:-9]
-        # print(wine_taste_and_usage)
-    except IndexError:
-        wine_taste = "Failed to fetch wine taste. Regex 9 failure. "
+        wine_taste_and_usage = page_html.find("p", class_="css-1cuz951 enp2lf70").contents[0]
     except Exception as e:
-        wine_taste = f"Failed to fetch wine taste. {e} "
-
-    try:
-        # Gets the taste and usage recommendations
-        pattern_usage = re.compile(
-            r"\"usage\"\:\"[a-zA-Z\s\S]*\"\,\"alcoholPercentage\""
-        )
-        wine_usage = pattern_usage.findall(str(page_html))
-        wine_usage = wine_usage[0][9:-21]
-        # print(wine_taste_and_usage)
-    except IndexError:
-        wine_usage = "Failed to fetch wine usage recommendations. Regex 10 failure. "
-    except Exception as e:
-        wine_usage = f"Failed to fetch wine usage recommendations. {e} "
-
-    # Combine taste and usage
-    wine_taste_and_usage = wine_taste + " " + wine_usage
+        wine_taste_and_usage = f"Failed to fetch wine taste. {e} "
 
     # Create and fill the class with data and return it
     class_instance_wine = Wine(
