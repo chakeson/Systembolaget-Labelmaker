@@ -2,6 +2,7 @@ from file_loading_validation import load_url_file, input_validation
 from label_creation import create_labels, create_output_docx
 from data_fetch import dataurl_data_fetcher, extract_drink_data
 
+
 def main():
 
     filen_name = "input.txt"
