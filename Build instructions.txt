@@ -1,1 +1,0 @@
-pyinstaller --onefile Systembolaget_Label.py
