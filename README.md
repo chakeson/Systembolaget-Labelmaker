@@ -6,14 +6,11 @@ Uses webscraping to take and url and create a label for the bottle.
 My parent make labels for their wine bottles to know what the wine fits with and what it contains and some other information.
 This program automates this process. 
 
-# Set up
-A chromium webdriver is needed in the [driver directory](src/driver), the file can be [downloaded here](https://chromedriver.chromium.org/downloads).
-
 
 # Build instructions
 The py installer spec was created with:
 
-```pyi-makespec Systembolaget_Label.py --onefile --add-binary "driver\chromedriver;driver"```
+```pyi-makespec Systembolaget_Label.py --onefile```
 
 To run the executable creation run:
 

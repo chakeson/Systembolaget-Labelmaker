@@ -1,6 +1,7 @@
 from file_loading_validation import load_url_file, input_validation
 from label_creation import create_labels, create_output_docx
 from data_fetch import dataurl_data_fetcher, extract_drink_data
+from driver.chrome import create_chrome_driver
 
 
 def main():
@@ -12,9 +13,11 @@ def main():
     pages = input_validation(pages)
     # print(pages) #check that the validation works
 
+    driver = create_chrome_driver()
     site_data = []  # Variable list with entries being site data
     for index, url in enumerate(pages):
-        site_data.append(dataurl_data_fetcher(url, index))
+        site_data.append(dataurl_data_fetcher(url, index, driver))
+    driver.close()
 
     class_list_wines = []
     for site in site_data:

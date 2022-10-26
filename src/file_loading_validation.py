@@ -3,9 +3,11 @@ import re, sys
 # Input 1 string
 # Output list o
 def load_url_file(file_to_load):
-    
+
     try:
-        with open(file_to_load, "r", encoding="utf-8") as urls:  # Opens the file with the URLs
+        with open(
+            file_to_load, "r", encoding="utf-8"
+        ) as urls:  # Opens the file with the URLs
             file_content = urls.readlines()
     except:
         print(

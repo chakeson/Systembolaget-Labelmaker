@@ -1,29 +1,22 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from wine import Wine
-from resource_path import resource_path
 
-# Input URL and index which is used to name it
-# Output
-def dataurl_data_fetcher(url, index):
+# import time
 
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--window-size=1920,1080")
-    exe_path = resource_path("./driver/chromedriver.exe")
+# Input URL, index, webdriver which is used to fetch it
+# Output soup of page
+def dataurl_data_fetcher(url, index, driver):
 
     try:
-        driver = webdriver.Chrome(
-            executable_path=exe_path, chrome_options=chrome_options
-        )
-
         driver.get(url)
-
+        # time.sleep(3) # Debug broken page waits.
+        test = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "css-3f5hx2"))
+        )
         soup = BeautifulSoup(driver.page_source, "html.parser")
-
-        driver.close()
 
     except Exception as e:
         with open("errorfile.txt", "w") as errorfile:
