@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(
     ['Systembolaget_Label.py'],
     pathex=[],
-    binaries=[('driver\\chromedriver.exe', 'driver')],
+    binaries=[],
     datas=[],
     hiddenimports=[],
     hookspath=[],
