@@ -1,4 +1,6 @@
-import re, sys
+import re
+import sys
+
 
 # Input 1 string
 # Output list o
