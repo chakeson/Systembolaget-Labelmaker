@@ -13,5 +13,7 @@ chromedriver.exe
 # misc
 *.pyc
 __pycache__
+errorfile.txt
 output.txt
 output.docx
+.vscode
