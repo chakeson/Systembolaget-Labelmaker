@@ -3,25 +3,23 @@ import re, sys
 # Input 1 string
 # Output list o
 def load_url_file(file_to_load):
-    urls = []
+    
     try:
-        urls = open(file_to_load, "r", encoding="utf-8")  # Opens the file with the URLs
+        with open(file_to_load, "r", encoding="utf-8") as urls:  # Opens the file with the URLs
+            file_content = urls.readlines()
     except:
         print(
             "Missing input txt file. Creating that now as input.txt. PLease enter the URLS, row separated"
         )
-
-        new_file = open("input.txt", "w")
-        new_file.write("\n")
-        new_file.close()
+        with open("input.txt", "w") as new_file:
+            new_file = open("input.txt", "w")
+            new_file.write("\n")
 
         sys.exit()
 
-    file_content = urls.readlines()
     for row in range(len(file_content)):
         file_content[row] = file_content[row].strip("\n")
 
-    # file_content = infil.read()
     return file_content
 
 
