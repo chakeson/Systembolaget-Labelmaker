@@ -30,6 +30,7 @@ def dataurl_data_fetcher(url, index, driver):
             driver.find_element(
                 By.XPATH, '//*[@id="__next"]/div/section/div/div/div[4]/div/div[2]/a'
             ).click()  # Press the accept button.
+            print('"Accepted" age button pressed.')
 
         # Wait until the page has loaded by checking until the wine title has loaded.
         # time.sleep(3) # Debug broken page waits.
@@ -99,7 +100,7 @@ def extract_drink_data(page_html):
         wine_suger_content = page_html.find_all("p", class_="css-l7e9hy enp2lf70")[
             2
         ].text
-        wine_suger_content = wine_suger_content[0:-8]  # '0,4 g/100ml' -> '0,4'
+        #wine_suger_content = wine_suger_content[0:-8]  # '0,4 g/100ml' -> '0,4'
     except Exception as e:
         wine_suger_content = f"Failed to fetch wine sugar content. {e} "
 

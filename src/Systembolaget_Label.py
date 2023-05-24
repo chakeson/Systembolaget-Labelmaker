@@ -13,11 +13,14 @@ def main():
     pages = input_validation(pages)
     # print(pages) #check that the validation works
 
+    print("Creating chrome driver")
     driver = create_chrome_driver()
+    print("Starting the scraping process.")
     site_data = []  # Variable list with entries being site data
     for index, url in enumerate(pages):
         site_data.append(dataurl_data_fetcher(url, index, driver))
     driver.close()
+    print(f'Scraped {len(site_data)} number of wine pages.')
 
     class_list_wines = []
     for site in site_data:
@@ -27,14 +30,17 @@ def main():
         del site
     except:
         pass
-
+    
+    print("Creating labels.")
     create_labels(class_list_wines)
     create_output_docx(class_list_wines)
 
 
 if __name__ == "__main__":
     try:
+        print("Launching program.")
         main()
+        print("Program has ended.")
     except Exception as e:
         print(e)
         input("Press Enter to exit.")
