@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from wine import Wine
 
+import time
+
 # import time
 
 # Input URL, index, webdriver which is used to fetch it
@@ -13,8 +15,25 @@ def dataurl_data_fetcher(url, index, driver):
 
     try:
         driver.get(url)
+
+        # Check if this is the first time opening. If it is press the age accept button.
+        if index == 0:
+            # Wait until the accept button has loaded.
+            test = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//*[@id="__next"]/div/section/div/div/div[4]/div/div[2]/a',
+                    )
+                )
+            )
+            driver.find_element(
+                By.XPATH, '//*[@id="__next"]/div/section/div/div/div[4]/div/div[2]/a'
+            ).click()  # Press the accept button.
+
+        # Wait until the page has loaded by checking until the wine title has loaded.
         # time.sleep(3) # Debug broken page waits.
-        test = WebDriverWait(driver, 5).until(
+        test = WebDriverWait(driver, 3).until(
             EC.presence_of_element_located((By.CLASS_NAME, "css-3f5hx2"))
         )
         soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -48,9 +67,7 @@ def extract_drink_data(page_html):
 
     try:
         # Gets the country and potentially region
-        wine_location = page_html.find_all("p", class_="css-l7e9hy enp2lf70")[
-            6
-        ].contents[0]
+        wine_location = page_html.find_all("p", class_="css-l7e9hy enp2lf70")[0].text
     except Exception as e:
         wine_location = f"Failed to fetch wine location 1. {e} "
 
@@ -80,8 +97,9 @@ def extract_drink_data(page_html):
     try:
         # Get the suger content of the drink
         wine_suger_content = page_html.find_all("p", class_="css-l7e9hy enp2lf70")[
-            8
-        ].contents[0]
+            2
+        ].text
+        wine_suger_content = wine_suger_content[0:-8]  # '0,4 g/100ml' -> '0,4'
     except Exception as e:
         wine_suger_content = f"Failed to fetch wine sugar content. {e} "
 
