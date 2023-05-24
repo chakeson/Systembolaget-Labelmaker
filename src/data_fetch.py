@@ -88,12 +88,11 @@ def extract_drink_data(page_html):
         wine_productnr = f"Failed to fetch wine product number. {e} "
 
     try:
-        # Gets the alcohole procentage
-        wine_alc_procentage = page_html.find_all("p", class_="css-12l74ml er6ap680")[
-            1
-        ].contents[0]
+        # Gets the alcohol procentage
+        wine_alc_procentage = page_html.find_all("p", class_="css-n38a55 e1j92x8u0")[1].text
+        #wine_alc_procentage = page_html.find_all("p", class_="css-12l74ml er6ap680") # Uses the visable parts of the site. the above pulls from invisible section.
     except Exception as e:
-        wine_alc_procentage = f"Failed to fetch wine alcohole procentage. {e} "
+        wine_alc_procentage = f"Failed to fetch wine alcohol procentage. {e} "
 
     try:
         # Get the suger content of the drink
