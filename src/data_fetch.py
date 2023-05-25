@@ -63,6 +63,9 @@ def extract_drink_data(page_html):
         wine_name2 = page_html.find(
             "h1", class_="css-3f5hx2 e1gytpgj0"
         ).next.next_sibling.contents[0]
+    except AttributeError as e:
+        print(f'Failed to find sub name for wine {wine_name}.\nError:\n{e}')
+        wine_name2 = "" # Most likely wine is like 256601 Gazella and has no second name.
     except Exception as e:
         wine_name2 = f"Failed to fetch wine sub name. {e} "
 
