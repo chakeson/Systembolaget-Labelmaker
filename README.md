@@ -29,9 +29,18 @@ It is then written to and output.txt and output.docx file.
 Code was formated by python black. Python-docx for creating the word document for print out ontop of output.txt
 Uses selenium to scrape it since it allows for running of the Javascript to populate the page. The site is based on Next Js.Uses the built-in html parser.
 
+## Testing
+We test with three wines to catch most cases. 
+
+256601 for a wine without full name.
+
+225701 a wine with multiple bottle types.
+
+626301 wine with higher price and diffrent location data, non integer alcohol procentage.
+
 # Notes
 
-This uses the chromium webdriver because the firefox one has alot of small edges and versions which are incompatible with selenium. Thus using the chromium webdriver I saved alot of time and effort. It quite frankly seems like the chromium one is getting all the attantion and developer time. To get the lastest chromium driver download it [here](https://chromedriver.chromium.org/downloads)
+This uses the chromium webdriver because the firefox one has alot of small edges and versions which are incompatible with selenium. Thus using the chromium webdriver I saved alot of time and effort. It quite frankly seems like the chromium one is getting all the attantion and developer time. The webdriver is downloaded and handled by the webdriver managment library. For a manual set up get the lastest chromium driver download it [here](https://chromedriver.chromium.org/downloads)
 
 ## Upgrades for next version
 Add GUI
