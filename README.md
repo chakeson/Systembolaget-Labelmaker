@@ -12,7 +12,7 @@ The py installer spec was created with:
 
 ```pyi-makespec Systembolaget_Label.py --onefile```
 
-To run the executable creation run:
+To create the executable run the following command in the [src folder](src):
 
 ```pyinstaller --clean Systembolaget_Label.spec```
 
