@@ -12,7 +12,7 @@ def create_chrome_driver():
     chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
     chrome_options.add_experimental_option("detach", True)
     driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()), chrome_options=chrome_options
+        service=Service(ChromeDriverManager().install()), options=chrome_options
     )
 
     return driver
