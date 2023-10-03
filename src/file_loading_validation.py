@@ -18,7 +18,8 @@ def load_url_file(file_to_load):
         with open("input.txt", "w") as new_file:
             new_file = open("input.txt", "w")
             new_file.write("\n")
-
+            
+        input("Press Enter to exit.")
         sys.exit()
 
     for row in range(len(file_content)):

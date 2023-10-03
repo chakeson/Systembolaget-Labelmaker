@@ -41,6 +41,7 @@ if __name__ == "__main__":
         print("Launching program.")
         main()
         print("Program has ended.")
+        input("Press Enter to exit.")
     except Exception as e:
         print(e)
         input("Press Enter to exit.")
