@@ -71,20 +71,20 @@ def extract_drink_data(page_html):
 
     try:
         # Gets the country and potentially region
-        wine_location = page_html.find_all("p", class_="css-l7e9hy enp2lf70")[0].text
+        wine_location = page_html.find_all("p", class_="css-1o089uh e1hb4h4s0")[0].text
     except Exception as e:
         wine_location = f"Failed to fetch wine location 1. {e} "
 
     try:
         # Gets the wine price
-        wine_price = page_html.find("p", class_="css-mzsruq enp2lf70").contents[0]
+        wine_price = page_html.find("p", class_="css-6dcbqr e1hb4h4s0").contents[0]
         wine_price = wine_price[0:-2]
     except Exception as e:
         wine_price = f"Failed to fetch wine price. {e} "
 
     try:
         # Gets the systembolaget productnr
-        wine_productnr = page_html.find("span", class_="css-1f2m4s6 enp2lf70").contents[
+        wine_productnr = page_html.find("span", class_="css-10upsrr e1hb4h4s0").contents[
             0
         ]
     except Exception as e:
@@ -92,14 +92,14 @@ def extract_drink_data(page_html):
 
     try:
         # Gets the alcohol procentage
-        wine_alc_procentage = page_html.find_all("p", class_="css-n38a55 e1j92x8u0")[1].text
+        wine_alc_procentage = page_html.find_all("p", class_="css-ke1pzw er6ap680")[2].text
         #wine_alc_procentage = page_html.find_all("p", class_="css-12l74ml er6ap680") # Uses the visable parts of the site. the above pulls from invisible section.
     except Exception as e:
         wine_alc_procentage = f"Failed to fetch wine alcohol procentage. {e} "
 
     try:
         # Get the suger content of the drink
-        wine_suger_content = page_html.find_all("p", class_="css-l7e9hy enp2lf70")[
+        wine_suger_content = page_html.find_all("p", class_="css-1o089uh e1hb4h4s0")[
             2
         ].text
         #wine_suger_content = wine_suger_content[0:-8]  # '0,4 g/100ml' -> '0,4'
@@ -109,7 +109,7 @@ def extract_drink_data(page_html):
     try:
         # Gets the taste and usage recommendations
         wine_taste_and_usage = page_html.find(
-            "p", class_="css-1cuz951 enp2lf70"
+            "p", class_="css-20iowv e1hb4h4s0"
         ).contents[0]
     except Exception as e:
         wine_taste_and_usage = f"Failed to fetch wine taste. {e} "
