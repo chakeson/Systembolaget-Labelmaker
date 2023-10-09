@@ -1,0 +1,8 @@
+Lime awful green
+#b7e8ca
+
+Yellow
+#dfc806
+
+Dark Green
+#095741
