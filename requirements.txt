@@ -3,3 +3,4 @@ docx==0.2.4
 python_docx==0.8.11
 selenium==4.13.0
 webdriver_manager==4.0.1
+pyinstaller==6.0.0
