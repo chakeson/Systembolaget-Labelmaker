@@ -51,6 +51,4 @@ Split out constants
 
 Create tests
 
-Consider adding an icon.
-
 Consider adding python black in with a [github action](https://black.readthedocs.io/en/stable/integrations/github_actions.html)
