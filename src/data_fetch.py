@@ -23,19 +23,20 @@ def dataurl_data_fetcher(url, index, driver):
                 EC.presence_of_element_located(
                     (
                         By.XPATH,
-                        '//*[@id="__next"]/div/section/div/div/div[4]/div/div[2]/a',
+                        '//*[@id="__next"]/div[1]/div[2]/div/section/div/div/div[3]/a[2]',
                     )
                 )
             )
             driver.find_element(
-                By.XPATH, '//*[@id="__next"]/div/section/div/div/div[4]/div/div[2]/a'
+                By.XPATH,
+                '//*[@id="__next"]/div[1]/div[2]/div/section/div/div/div[3]/a[2]',
             ).click()  # Press the accept button.
             print('"Accepted" age button pressed.')
 
         # Wait until the page has loaded by checking until the wine title has loaded.
         # time.sleep(3) # Debug broken page waits.
         test = WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "css-3f5hx2"))
+            EC.presence_of_element_located((By.CLASS_NAME, "css-m7kuem"))
         )
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
@@ -54,37 +55,42 @@ def extract_drink_data(page_html):
 
     try:
         # Gets title name
-        wine_name = page_html.find("h1", class_="css-3f5hx2 e1gytpgj0").next.contents[0]
+        wine_name = page_html.find("h1", class_="css-1uk1gs8 e6czixi0").next.contents[0]
     except Exception as e:
         wine_name = f"Failed to fetch wine name. {e} "
 
     try:
         # Gets sub name
         wine_name2 = page_html.find(
-            "h1", class_="css-3f5hx2 e1gytpgj0"
+            "h1", class_="css-1uk1gs8 e6czixi0"
         ).next.next_sibling.contents[0]
     except AttributeError as e:
-        print(f'Failed to find sub name for wine {wine_name}.\nError:\n{e}')
-        wine_name2 = "" # Most likely wine is like 256601 Gazella and has no second name.
+        print(f"Failed to find sub name for wine {wine_name}.\nError:\n{e}")
+        wine_name2 = (
+            ""  # Most likely wine is like 256601 Gazella and has no second name.
+        )
     except Exception as e:
         wine_name2 = f"Failed to fetch wine sub name. {e} "
 
     try:
         # Gets the country and potentially region
-        wine_location = page_html.find_all("p", class_="css-1o089uh e1hb4h4s0")[0].text
+        wine_location = page_html.find_all("div", class_="css-chaqmn e12xogow0")
+        wine_location = (
+            wine_location[1].contents[0].text + ", " + wine_location[1].contents[1].text
+        )
     except Exception as e:
         wine_location = f"Failed to fetch wine location 1. {e} "
 
     try:
         # Gets the wine price
-        wine_price = page_html.find("p", class_="css-6dcbqr e1hb4h4s0").contents[0]
+        wine_price = page_html.find("p", class_="css-ylm6mu eqfj59s0").contents[0]
         wine_price = wine_price[0:-2]
     except Exception as e:
         wine_price = f"Failed to fetch wine price. {e} "
 
     try:
         # Gets the systembolaget productnr
-        wine_productnr = page_html.find("span", class_="css-10upsrr e1hb4h4s0").contents[
+        wine_productnr = page_html.find("span", class_="css-1sd13ch eqfj59s0").contents[
             0
         ]
     except Exception as e:
@@ -92,25 +98,26 @@ def extract_drink_data(page_html):
 
     try:
         # Gets the alcohol procentage
-        wine_alc_procentage = page_html.find_all("p", class_="css-ke1pzw er6ap680")[2].text
-        #wine_alc_procentage = page_html.find_all("p", class_="css-12l74ml er6ap680") # Uses the visable parts of the site. the above pulls from invisible section.
+        wine_alc_procentage = (
+            page_html.find("div", class_="css-eb75o2 e12xogow0").contents[-1].text
+        )
     except Exception as e:
         wine_alc_procentage = f"Failed to fetch wine alcohol procentage. {e} "
 
     try:
         # Get the suger content of the drink
-        wine_suger_content = page_html.find_all("p", class_="css-1o089uh e1hb4h4s0")[
-            2
+        wine_suger_content = page_html.find_all("p", class_="css-1962of eqfj59s0")[
+            8
         ].text
-        #wine_suger_content = wine_suger_content[0:-8]  # '0,4 g/100ml' -> '0,4'
+        # wine_suger_content = wine_suger_content[0:-8]  # '0,4 g/100ml' -> '0,4'
     except Exception as e:
         wine_suger_content = f"Failed to fetch wine sugar content. {e} "
 
     try:
         # Gets the taste and usage recommendations
-        wine_taste_and_usage = page_html.find(
-            "p", class_="css-20iowv e1hb4h4s0"
-        ).contents[0]
+        wine_taste_and_usage = page_html.find_all("p", class_="css-173act9 eqfj59s0")[
+            20
+        ].text
     except Exception as e:
         wine_taste_and_usage = f"Failed to fetch wine taste. {e} "
 
